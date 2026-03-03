@@ -7,6 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
+interface Variante {
+  id: string;
+  size: string;
+  color: string;
+  stock: number;
+  extraPrice: number;
+}
+
 interface Producto {
   id: string;
   name: string;
@@ -15,7 +23,7 @@ interface Producto {
   salePrice: number | null;
   isActive: boolean;
   images: { id: string; url: string }[];
-  variants: { id: string; size: string; color: string; stock: number }[];
+  variants: Variante[];
 }
 
 export default function ProductoEditPage({ params }: { params: Promise<{ id: string }> }) {
