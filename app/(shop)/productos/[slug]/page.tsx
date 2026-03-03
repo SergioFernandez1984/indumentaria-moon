@@ -20,8 +20,8 @@ export default async function ProductoPage({ params }: Props) {
 
   if (!producto) notFound(); 
 
-  const sizes = [...new Set(producto.variants.map((v: { size: string }) => v.size))]; 
-  const colors = [...new Set(producto.variants.map((v: { color: string }) => v.color))]; 
+  const sizes: string[] = [...new Set<string>(producto.variants.map((v: { size: string }) => v.size))]; 
+  const colors: string[] = [...new Set<string>(producto.variants.map((v: { color: string }) => v.color))]; 
 
   return ( 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12"> 
