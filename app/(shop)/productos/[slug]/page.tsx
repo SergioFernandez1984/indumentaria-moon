@@ -38,7 +38,7 @@ export default async function ProductoPage({ params }: Props) {
             </div> 
             {producto.images.length > 1 && ( 
               <div className="flex gap-2"> 
-                {producto.images.slice(1).map((img) => ( 
+                {producto.images.slice(1).map((img: { id: string; url: string; altText: string | null }) => ( 
                   <div 
                     key={img.id} 
                     className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden" 
