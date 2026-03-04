@@ -36,6 +36,8 @@ export async function POST(request: Request) {
 
     if (aiOptimize) {
       cloudinaryConfig.background_removal = "cloudinary_ai";
+      // Añadimos también effect: "background_removal" a la transformación para forzar el on-the-fly si el add-on demora
+      cloudinaryConfig.transformation.push({ effect: "background_removal" });
     }
 
     // Subir a Cloudinary usando un stream para mayor eficiencia con archivos grandes 
