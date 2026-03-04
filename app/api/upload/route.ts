@@ -52,10 +52,20 @@ export async function POST(request: Request) {
     // Guardar la URL en la base de datos 
     const { prisma } = await import("@/lib/prisma");
 
+    let finalUrl = result.secure_url;
+
+    // Si se pidió optimización IA, inyectar el parámetro e_background_removal en la URL 
+    if (aiOptimize) {
+      finalUrl = finalUrl.replace("/upload/", "/upload/e_background_removal/");
+      // Si Cloudinary la guarda como jpg y le removemos fondo, el navegador la procesa pero a veces se renderiza negra/blanca,
+      // es mejor forzar la extensión a png en la URL para que cloudinary la convierta al vuelo
+      finalUrl = finalUrl.replace(/\.[^/.]+$/, ".png");
+    }
+
     const image = await prisma.productImage.create({
       data: {
         productId,
-        url: result.secure_url,
+        url: finalUrl,
         altText: file.name,
         isPrimary: isPrimary,
         sortOrder: 0,
