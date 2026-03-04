@@ -6,9 +6,10 @@ export default auth((req) => {
     const isDashboardRoute = req.nextUrl.pathname.startsWith("/dashboard");
 
     if (isDashboardRoute && !isLoggedIn) {
-        const url = req.nextUrl.clone();
-        url.pathname = "/login";
-        return NextResponse.redirect(url);
+        // Obtenemos el dominio real que usó el navegador (ya sea sslip.io o indumentariamoon.com.ar)
+        const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "localhost:3000";
+        const protocol = req.headers.get("x-forwarded-proto") || "http";
+        return NextResponse.redirect(new URL("/login", `${protocol}://${host}`));
     }
     return NextResponse.next();
 });
