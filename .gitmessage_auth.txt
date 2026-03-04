@@ -1,0 +1,1 @@
+Add NextAuth Credentials auth and env var usage
