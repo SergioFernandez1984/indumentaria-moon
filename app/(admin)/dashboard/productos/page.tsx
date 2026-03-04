@@ -24,7 +24,6 @@ export default function ProductosPage() {
   });
   const [imagenes, setImagenes] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-  const [aiOptimize, setAiOptimize] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -73,7 +72,6 @@ export default function ProductosPage() {
             const formData = new FormData();
             formData.append("file", img);
             formData.append("productId", producto.id);
-            formData.append("aiOptimize", String(aiOptimize));
             formData.append("isPrimary", String(index === 0));
 
             const imgRes = await fetch("/api/upload", {
@@ -90,7 +88,6 @@ export default function ProductosPage() {
       setForm({ name: "", description: "", basePrice: "", salePrice: "" });
       setImagenes([]);
       setPreviews([]);
-      setAiOptimize(false);
 
       // Recargar lista
       const updated = await fetch("/api/productos").then((r) => r.json());
@@ -168,19 +165,6 @@ export default function ProductosPage() {
                 onChange={handleImagen}
                 className="cursor-pointer"
               />
-
-              <div className="flex items-center gap-2 mt-4 mb-2">
-                <input
-                  type="checkbox"
-                  id="aiOptimize"
-                  checked={aiOptimize}
-                  onChange={(e) => setAiOptimize(e.target.checked)}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                <Label htmlFor="aiOptimize" className="text-purple-600 font-medium cursor-pointer">
-                  ✨ Remover Fondo con IA (Cloudinary)
-                </Label>
-              </div>
 
               {previews.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 mt-4">

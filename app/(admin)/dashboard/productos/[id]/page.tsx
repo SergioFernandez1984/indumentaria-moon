@@ -50,7 +50,6 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
   const [addingVariant, setAddingVariant] = useState(false);
 
   const [newImages, setNewImages] = useState<File[]>([]);
-  const [aiOptimize, setAiOptimize] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
 
   const handleNewImages = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +66,6 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
           const formData = new FormData();
           formData.append("file", img);
           formData.append("productId", id);
-          formData.append("aiOptimize", String(aiOptimize));
           formData.append("isPrimary", "false");
 
           const imgRes = await fetch("/api/upload", {
@@ -80,7 +78,6 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
       const updatedProd = await fetch(`/api/productos/${id}`).then(res => res.json());
       setProducto(updatedProd);
       setNewImages([]);
-      setAiOptimize(false);
       alert("Imágenes subidas correctamente");
     } catch (err) {
       alert("Error al subir nuevas imágenes");
@@ -257,18 +254,7 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
                 onChange={handleNewImages}
                 className="cursor-pointer mb-3 mt-2"
               />
-              <div className="flex items-center gap-2 mb-4">
-                <input
-                  type="checkbox"
-                  id="aiOptimizeEdit"
-                  checked={aiOptimize}
-                  onChange={(e) => setAiOptimize(e.target.checked)}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                <Label htmlFor="aiOptimizeEdit" className="text-purple-600 font-medium cursor-pointer">
-                  ✨ Remover Fondo con IA
-                </Label>
-              </div>
+
               <Button type="button" onClick={handleUploadNewImages} disabled={uploadingImages || newImages.length === 0} variant="secondary">
                 {uploadingImages ? "Subiendo..." : "Subir seleccionadas"}
               </Button>
