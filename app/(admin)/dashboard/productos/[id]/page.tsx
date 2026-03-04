@@ -33,13 +33,13 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
   const [saving, setSaving] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
-  const [formProducto, setFormProducto] = useState({ 
-    name: "", 
-    description: "", 
-    basePrice: "", 
-    salePrice: "", 
-  }); 
-  const [mensajeProducto, setMensajeProducto] = useState(""); 
+  const [formProducto, setFormProducto] = useState({
+    name: "",
+    description: "",
+    basePrice: "",
+    salePrice: "",
+  });
+  const [mensajeProducto, setMensajeProducto] = useState("");
 
   const [formVariante, setFormVariante] = useState({
     size: "",
@@ -49,53 +49,93 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
   });
   const [addingVariant, setAddingVariant] = useState(false);
 
-  useEffect(() => { 
-    if (!id) return; 
-    fetch(`/api/productos/${id}`) 
-      .then((res) => { 
-        if (!res.ok) throw new Error("Error al obtener producto"); 
-        return res.json(); 
-      }) 
-      .then((data) => { 
-        console.log("Producto cargado:", data); 
-        setProducto(data); 
-        setFormProducto({ 
-          name: data.name, 
-          description: data.description ?? "", 
-          basePrice: data.basePrice.toString(), 
-          salePrice: data.salePrice?.toString() ?? "", 
-        }); 
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [aiOptimize, setAiOptimize] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+
+  const handleNewImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setNewImages(files);
+  };
+
+  const handleUploadNewImages = async () => {
+    if (newImages.length === 0) return;
+    setUploadingImages(true);
+    try {
+      await Promise.all(
+        newImages.map(async (img) => {
+          const formData = new FormData();
+          formData.append("file", img);
+          formData.append("productId", id);
+          formData.append("aiOptimize", String(aiOptimize));
+          formData.append("isPrimary", "false");
+
+          const imgRes = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+          if (!imgRes.ok) throw new Error("Error al subir imagen");
+        })
+      );
+      const updatedProd = await fetch(`/api/productos/${id}`).then(res => res.json());
+      setProducto(updatedProd);
+      setNewImages([]);
+      setAiOptimize(false);
+      alert("Imágenes subidas correctamente");
+    } catch (err) {
+      alert("Error al subir nuevas imágenes");
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!id) return;
+    fetch(`/api/productos/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener producto");
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Producto cargado:", data);
+        setProducto(data);
+        setFormProducto({
+          name: data.name,
+          description: data.description ?? "",
+          basePrice: data.basePrice.toString(),
+          salePrice: data.salePrice?.toString() ?? "",
+        });
         setLoading(false);
-      }) 
+      })
       .catch((err) => {
         console.error(err);
         setLoading(false);
-      }); 
+      });
   }, [id]);
 
-  const handleUpdateProducto = async (e: React.FormEvent) => { 
-    e.preventDefault(); 
+  const handleUpdateProducto = async (e: React.FormEvent) => {
+    e.preventDefault();
     setSaving(true);
-    try { 
-      const res = await fetch(`/api/productos/${id}`, { 
-        method: "PUT", 
-        headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ 
-          name: formProducto.name, 
-          description: formProducto.description, 
-          basePrice: parseFloat(formProducto.basePrice), 
-          salePrice: formProducto.salePrice ? parseFloat(formProducto.salePrice) : null, 
+    try {
+      const res = await fetch(`/api/productos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formProducto.name,
+          description: formProducto.description,
+          basePrice: parseFloat(formProducto.basePrice),
+          salePrice: formProducto.salePrice ? parseFloat(formProducto.salePrice) : null,
           isActive: producto?.isActive ?? true,
-        }), 
-      }); 
-      if (!res.ok) throw new Error(); 
-      setMensajeProducto("✅ Producto actualizado"); 
-    } catch { 
-      setMensajeProducto("❌ Error al actualizar"); 
+        }),
+      });
+      if (!res.ok) throw new Error();
+      setMensajeProducto("✅ Producto actualizado");
+    } catch {
+      setMensajeProducto("❌ Error al actualizar");
     } finally {
       setSaving(false);
     }
-  }; 
+  };
 
   const handleAddVariante = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,60 +185,60 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
         <h1 className="text-2xl font-bold">Editar: {producto.name}</h1>
       </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm border mb-8 max-w-lg"> 
-        <h2 className="font-semibold mb-4">Editar producto</h2> 
-        <form onSubmit={handleUpdateProducto} className="flex flex-col gap-4"> 
-          <div> 
-            <Label htmlFor="edit-name">Nombre</Label> 
-            <Input 
-              id="edit-name" 
-              value={formProducto.name} 
-              onChange={(e) => setFormProducto({ ...formProducto, name: e.target.value })} 
-              required 
-            /> 
-          </div> 
-          <div> 
-            <Label htmlFor="edit-description">Descripción</Label> 
-            <Textarea 
-              id="edit-description" 
-              value={formProducto.description} 
-              onChange={(e) => setFormProducto({ ...formProducto, description: e.target.value })} 
+      <div className="bg-white rounded-xl p-6 shadow-sm border mb-8 max-w-lg">
+        <h2 className="font-semibold mb-4">Editar producto</h2>
+        <form onSubmit={handleUpdateProducto} className="flex flex-col gap-4">
+          <div>
+            <Label htmlFor="edit-name">Nombre</Label>
+            <Input
+              id="edit-name"
+              value={formProducto.name}
+              onChange={(e) => setFormProducto({ ...formProducto, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="edit-description">Descripción</Label>
+            <Textarea
+              id="edit-description"
+              value={formProducto.description}
+              onChange={(e) => setFormProducto({ ...formProducto, description: e.target.value })}
               rows={4}
-            /> 
-          </div> 
-          <div className="grid grid-cols-2 gap-4"> 
-            <div> 
-              <Label htmlFor="edit-price">Precio</Label> 
-              <Input 
-                id="edit-price" 
-                type="number" 
-                value={formProducto.basePrice} 
-                onChange={(e) => setFormProducto({ ...formProducto, basePrice: e.target.value })} 
-                required 
-              /> 
-            </div> 
-            <div> 
-              <Label htmlFor="edit-sale">Precio oferta</Label> 
-              <Input 
-                id="edit-sale" 
-                type="number" 
-                value={formProducto.salePrice} 
-                onChange={(e) => setFormProducto({ ...formProducto, salePrice: e.target.value })} 
-              /> 
-            </div> 
-          </div> 
-          {mensajeProducto && <p className="text-sm">{mensajeProducto}</p>} 
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="edit-price">Precio</Label>
+              <Input
+                id="edit-price"
+                type="number"
+                value={formProducto.basePrice}
+                onChange={(e) => setFormProducto({ ...formProducto, basePrice: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-sale">Precio oferta</Label>
+              <Input
+                id="edit-sale"
+                type="number"
+                value={formProducto.salePrice}
+                onChange={(e) => setFormProducto({ ...formProducto, salePrice: e.target.value })}
+              />
+            </div>
+          </div>
+          {mensajeProducto && <p className="text-sm">{mensajeProducto}</p>}
           <Button type="submit" disabled={saving}>
             {saving ? "Guardando..." : "Guardar cambios"}
-          </Button> 
-        </form> 
-      </div> 
+          </Button>
+        </form>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="flex flex-col gap-8">
           {/* Imágenes */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="font-semibold mb-4">Imágenes</h2>
+          <div className="bg-white rounded-xl p-6 shadow-sm border flex flex-col gap-4">
+            <h2 className="font-semibold">Imágenes del producto</h2>
             <div className="grid grid-cols-3 gap-4">
               {producto.images.map((img) => (
                 <div key={img.id} className="aspect-[3/4] relative rounded-lg overflow-hidden border">
@@ -206,12 +246,39 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
                 </div>
               ))}
             </div>
+
+            <div className="mt-2 border-t pt-4">
+              <Label htmlFor="new-images">Añadir nuevas imágenes</Label>
+              <Input
+                id="new-images"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleNewImages}
+                className="cursor-pointer mb-3 mt-2"
+              />
+              <div className="flex items-center gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  id="aiOptimizeEdit"
+                  checked={aiOptimize}
+                  onChange={(e) => setAiOptimize(e.target.checked)}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <Label htmlFor="aiOptimizeEdit" className="text-purple-600 font-medium cursor-pointer">
+                  ✨ Remover Fondo con IA
+                </Label>
+              </div>
+              <Button type="button" onClick={handleUploadNewImages} disabled={uploadingImages || newImages.length === 0} variant="secondary">
+                {uploadingImages ? "Subiendo..." : "Subir seleccionadas"}
+              </Button>
+            </div>
           </div>
 
           {/* Variantes */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4 text-lg">Variantes (Talle/Color/Stock)</h2>
-            
+
             <div className="flex flex-col gap-3 mb-8">
               {producto.variants.length === 0 && (
                 <p className="text-gray-400 text-sm">No hay variantes configuradas.</p>

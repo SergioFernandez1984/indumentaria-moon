@@ -22,8 +22,9 @@ export default function ProductosPage() {
     basePrice: "",
     salePrice: "",
   });
-  const [imagen, setImagen] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [imagenes, setImagenes] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [aiOptimize, setAiOptimize] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -36,10 +37,11 @@ export default function ProductosPage() {
   }, []);
 
   const handleImagen = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImagen(file);
-      setPreview(URL.createObjectURL(file));
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      setImagenes((prev) => [...prev, ...files]);
+      const newPreviews = files.map((file) => URL.createObjectURL(file));
+      setPreviews((prev) => [...prev, ...newPreviews]);
     }
   };
 
@@ -64,24 +66,31 @@ export default function ProductosPage() {
       if (!res.ok) throw new Error("Error al crear producto");
       const producto = await res.json();
 
-      // 2. Subir imagen si hay una
-      if (imagen) {
-        const formData = new FormData();
-        formData.append("file", imagen);
-        formData.append("productId", producto.id);
+      // 2. Subir imágenes si hay
+      if (imagenes.length > 0) {
+        await Promise.all(
+          imagenes.map(async (img, index) => {
+            const formData = new FormData();
+            formData.append("file", img);
+            formData.append("productId", producto.id);
+            formData.append("aiOptimize", String(aiOptimize));
+            formData.append("isPrimary", String(index === 0));
 
-        const imgRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+            const imgRes = await fetch("/api/upload", {
+              method: "POST",
+              body: formData,
+            });
 
-        if (!imgRes.ok) throw new Error("Error al subir imagen");
+            if (!imgRes.ok) throw new Error("Error al subir imagen");
+          })
+        );
       }
 
       setMensaje("✅ Producto creado correctamente");
       setForm({ name: "", description: "", basePrice: "", salePrice: "" });
-      setImagen(null);
-      setPreview(null);
+      setImagenes([]);
+      setPreviews([]);
+      setAiOptimize(false);
 
       // Recargar lista
       const updated = await fetch("/api/productos").then((r) => r.json());
@@ -150,20 +159,40 @@ export default function ProductosPage() {
             </div>
 
             <div>
-              <Label htmlFor="imagen">Imagen del producto</Label>
+              <Label htmlFor="imagen">Imágenes del producto (Podés subir varias)</Label>
               <Input
                 id="imagen"
                 type="file"
+                multiple
                 accept="image/*"
                 onChange={handleImagen}
                 className="cursor-pointer"
               />
-              {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="mt-2 rounded-lg w-full h-48 object-cover"
+
+              <div className="flex items-center gap-2 mt-4 mb-2">
+                <input
+                  type="checkbox"
+                  id="aiOptimize"
+                  checked={aiOptimize}
+                  onChange={(e) => setAiOptimize(e.target.checked)}
+                  className="w-4 h-4 cursor-pointer"
                 />
+                <Label htmlFor="aiOptimize" className="text-purple-600 font-medium cursor-pointer">
+                  ✨ Remover Fondo con IA (Cloudinary)
+                </Label>
+              </div>
+
+              {previews.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-4">
+                  {previews.map((p, i) => (
+                    <img
+                      key={i}
+                      src={p}
+                      alt={`Preview ${i}`}
+                      className="rounded-lg w-full h-24 object-cover"
+                    />
+                  ))}
+                </div>
               )}
             </div>
 
@@ -203,7 +232,7 @@ export default function ProductosPage() {
                 <div className="flex-1">
                   <p className="font-medium text-sm">{p.name}</p>
                   <p className="text-gray-500 text-xs">
-                    ${p.salePrice != null ? p.salePrice.toLocaleString("es-AR") : p.basePrice.toLocaleString("es-AR")} 
+                    ${p.salePrice != null ? p.salePrice.toLocaleString("es-AR") : p.basePrice.toLocaleString("es-AR")}
                   </p>
                 </div>
                 <a

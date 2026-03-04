@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import CarritoIcon from "@/components/CarritoIcon";
 
 export default function NavbarModern() {
@@ -16,9 +17,14 @@ export default function NavbarModern() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     href="/"
-                    className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400"
+                    className="relative w-32 h-12"
                 >
-                    🌙 Moon
+                    <Image
+                        src="/logo.png"
+                        alt="Moon Indumentaria Logo"
+                        fill
+                        className="object-contain"
+                    />
                 </motion.a>
 
                 <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-300">
