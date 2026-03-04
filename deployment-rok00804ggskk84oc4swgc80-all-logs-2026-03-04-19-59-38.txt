@@ -1,0 +1,391 @@
+2026-Mar-04 19:57:54.898830 Starting deployment of SergioFernandez1984/indumentaria-moon:main to localhost.
+2026-Mar-04 19:57:55.570004 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.12
+2026-Mar-04 19:57:55.969597 [DEBUG] [CMD]: docker stop -t 30 rok00804ggskk84oc4swgc80
+2026-Mar-04 19:57:55.969597 [DEBUG] Error response from daemon: No such container: rok00804ggskk84oc4swgc80
+2026-Mar-04 19:57:56.355728 [DEBUG] [CMD]: docker run -d --network coolify --name rok00804ggskk84oc4swgc80  --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.12
+2026-Mar-04 19:57:56.355728 [DEBUG] d4e8b6ce48512af6797694e5a9ec9aaf1b0ccdf61516ffa4dde0b0dd7f14e209
+2026-Mar-04 19:57:58.070015 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote https://x-access-token:<REDACTED>@github.com/SergioFernandez1984/indumentaria-moon.git refs/heads/main'
+2026-Mar-04 19:57:58.070015 [DEBUG] b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f	refs/heads/main
+2026-Mar-04 19:57:58.417182 Image not found (qoko4sck4444ssc0coks08o4:b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f). Building new image.
+2026-Mar-04 19:57:58.535198 ----------------------------------------
+2026-Mar-04 19:57:58.543035 Importing SergioFernandez1984/indumentaria-moon:main (commit sha b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f) to /artifacts/rok00804ggskk84oc4swgc80.
+2026-Mar-04 19:57:58.951687 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'git clone --depth=1 --recurse-submodules --shallow-submodules -b 'main' 'https://x-access-token:<REDACTED>@github.com/SergioFernandez1984/indumentaria-moon.git' '/artifacts/rok00804ggskk84oc4swgc80' && cd '/artifacts/rok00804ggskk84oc4swgc80' && if [ -f .gitmodules ]; then git submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git submodule update --init --recursive --depth=1; fi && cd '/artifacts/rok00804ggskk84oc4swgc80' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git lfs pull'
+2026-Mar-04 19:57:58.951687 [DEBUG] Cloning into '/artifacts/rok00804ggskk84oc4swgc80'...
+2026-Mar-04 19:58:00.387432 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'cd /artifacts/rok00804ggskk84oc4swgc80 && git log -1 b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f --pretty=%B'
+2026-Mar-04 19:58:00.387432 [DEBUG] fix: explicit prisma generate in package scripts for coolify
+2026-Mar-04 19:58:00.806064 Generating nixpacks configuration with: nixpacks plan -f json --env NIXPACKS_NODE_VERSION=20.19 --env COOLIFY_URL=http://qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io --env COOLIFY_FQDN=qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io --env COOLIFY_BRANCH=main --env COOLIFY_RESOURCE_UUID=qoko4sck4444ssc0coks08o4 /artifacts/rok00804ggskk84oc4swgc80
+2026-Mar-04 19:58:01.215003 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'nixpacks plan -f json --env NIXPACKS_NODE_VERSION=20.19 --env COOLIFY_URL=http://qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io --env COOLIFY_FQDN=qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io --env COOLIFY_BRANCH=main --env COOLIFY_RESOURCE_UUID=qoko4sck4444ssc0coks08o4 /artifacts/rok00804ggskk84oc4swgc80'
+2026-Mar-04 19:58:01.215003 [DEBUG] {
+2026-Mar-04 19:58:01.215003 [DEBUG] "providers": [],
+2026-Mar-04 19:58:01.215003 [DEBUG] "buildImage": "ghcr.io/railwayapp/nixpacks:ubuntu-1745885067",
+2026-Mar-04 19:58:01.215003 [DEBUG] "variables": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "CI": "true",
+2026-Mar-04 19:58:01.215003 [DEBUG] "COOLIFY_BRANCH": "main",
+2026-Mar-04 19:58:01.215003 [DEBUG] "COOLIFY_FQDN": "qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io",
+2026-Mar-04 19:58:01.215003 [DEBUG] "COOLIFY_RESOURCE_UUID": "qoko4sck4444ssc0coks08o4",
+2026-Mar-04 19:58:01.215003 [DEBUG] "COOLIFY_URL": "http://qoko4sck4444ssc0coks08o4.178.156.255.141.sslip.io",
+2026-Mar-04 19:58:01.215003 [DEBUG] "NIXPACKS_METADATA": "node",
+2026-Mar-04 19:58:01.215003 [DEBUG] "NIXPACKS_NODE_VERSION": "20.19",
+2026-Mar-04 19:58:01.215003 [DEBUG] "NODE_ENV": "production",
+2026-Mar-04 19:58:01.215003 [DEBUG] "NPM_CONFIG_PRODUCTION": "false"
+2026-Mar-04 19:58:01.215003 [DEBUG] },
+2026-Mar-04 19:58:01.215003 [DEBUG] "phases": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "build": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "dependsOn": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "install"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "cmds": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "npm run build"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "cacheDirectories": [
+2026-Mar-04 19:58:01.215003 [DEBUG] ".next/cache",
+2026-Mar-04 19:58:01.215003 [DEBUG] "node_modules/.cache"
+2026-Mar-04 19:58:01.215003 [DEBUG] ]
+2026-Mar-04 19:58:01.215003 [DEBUG] },
+2026-Mar-04 19:58:01.215003 [DEBUG] "install": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "dependsOn": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "setup"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "cmds": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "npm ci"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "cacheDirectories": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "/root/.npm"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "paths": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "/app/node_modules/.bin"
+2026-Mar-04 19:58:01.215003 [DEBUG] ]
+2026-Mar-04 19:58:01.215003 [DEBUG] },
+2026-Mar-04 19:58:01.215003 [DEBUG] "setup": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "nixPkgs": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "nodejs_20",
+2026-Mar-04 19:58:01.215003 [DEBUG] "npm-9_x",
+2026-Mar-04 19:58:01.215003 [DEBUG] "openssl"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "nixLibs": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "gcc-unwrapped"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "nixOverlays": [
+2026-Mar-04 19:58:01.215003 [DEBUG] "https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz"
+2026-Mar-04 19:58:01.215003 [DEBUG] ],
+2026-Mar-04 19:58:01.215003 [DEBUG] "nixpkgsArchive": "23f9169c4ccce521379e602cc82ed873a1f1b52b"
+2026-Mar-04 19:58:01.215003 [DEBUG] }
+2026-Mar-04 19:58:01.215003 [DEBUG] },
+2026-Mar-04 19:58:01.215003 [DEBUG] "start": {
+2026-Mar-04 19:58:01.215003 [DEBUG] "cmd": "npm run start"
+2026-Mar-04 19:58:01.215003 [DEBUG] }
+2026-Mar-04 19:58:01.215003 [DEBUG] }
+2026-Mar-04 19:58:01.620080 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'nixpacks detect /artifacts/rok00804ggskk84oc4swgc80'
+2026-Mar-04 19:58:01.620080 [DEBUG] node
+2026-Mar-04 19:58:01.631928 Found application type: node.
+2026-Mar-04 19:58:01.637502 If you need further customization, please check the documentation of Nixpacks: https://nixpacks.com/docs/providers/node
+2026-Mar-04 19:58:01.661474 [DEBUG] Final Nixpacks plan: {
+2026-Mar-04 19:58:01.661474 [DEBUG] "providers": [],
+2026-Mar-04 19:58:01.661474 [DEBUG] "buildImage": "ghcr.io\/railwayapp\/nixpacks:ubuntu-1745885067",
+2026-Mar-04 19:58:01.661474 [DEBUG] "phases": {
+2026-Mar-04 19:58:01.661474 [DEBUG] "build": {
+2026-Mar-04 19:58:01.661474 [DEBUG] "dependsOn": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "install"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "cmds": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "npm run build"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "cacheDirectories": [
+2026-Mar-04 19:58:01.661474 [DEBUG] ".next\/cache",
+2026-Mar-04 19:58:01.661474 [DEBUG] "node_modules\/.cache"
+2026-Mar-04 19:58:01.661474 [DEBUG] ]
+2026-Mar-04 19:58:01.661474 [DEBUG] },
+2026-Mar-04 19:58:01.661474 [DEBUG] "install": {
+2026-Mar-04 19:58:01.661474 [DEBUG] "dependsOn": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "setup"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "cmds": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "npm ci"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "cacheDirectories": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "\/root\/.npm"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "paths": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "\/app\/node_modules\/.bin"
+2026-Mar-04 19:58:01.661474 [DEBUG] ]
+2026-Mar-04 19:58:01.661474 [DEBUG] },
+2026-Mar-04 19:58:01.661474 [DEBUG] "setup": {
+2026-Mar-04 19:58:01.661474 [DEBUG] "nixPkgs": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "nodejs_20",
+2026-Mar-04 19:58:01.661474 [DEBUG] "npm-9_x",
+2026-Mar-04 19:58:01.661474 [DEBUG] "openssl"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "nixLibs": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "gcc-unwrapped"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "nixOverlays": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "https:\/\/github.com\/railwayapp\/nix-npm-overlay\/archive\/main.tar.gz"
+2026-Mar-04 19:58:01.661474 [DEBUG] ],
+2026-Mar-04 19:58:01.661474 [DEBUG] "nixpkgsArchive": "23f9169c4ccce521379e602cc82ed873a1f1b52b",
+2026-Mar-04 19:58:01.661474 [DEBUG] "aptPkgs": [
+2026-Mar-04 19:58:01.661474 [DEBUG] "curl",
+2026-Mar-04 19:58:01.661474 [DEBUG] "wget"
+2026-Mar-04 19:58:01.661474 [DEBUG] ]
+2026-Mar-04 19:58:01.661474 [DEBUG] }
+2026-Mar-04 19:58:01.661474 [DEBUG] },
+2026-Mar-04 19:58:01.661474 [DEBUG] "start": {
+2026-Mar-04 19:58:01.661474 [DEBUG] "cmd": "npm run start"
+2026-Mar-04 19:58:01.661474 [DEBUG] }
+2026-Mar-04 19:58:01.661474 [DEBUG] }
+2026-Mar-04 19:58:03.145474 [DEBUG] Creating build-time .env file in /artifacts (outside Docker context).
+2026-Mar-04 19:58:03.532710 ----------------------------------------
+2026-Mar-04 19:58:03.539963 ⚠️ Build-time environment variable warning: NODE_ENV=production
+2026-Mar-04 19:58:03.546847 Affects: Node.js/npm/yarn/bun/pnpm
+2026-Mar-04 19:58:03.551886 Issue: Skips devDependencies installation which are often required for building (webpack, typescript, etc.)
+2026-Mar-04 19:58:03.557287 Recommendation: Uncheck "Available at Buildtime" or use "development" during build
+2026-Mar-04 19:58:03.562612 
+2026-Mar-04 19:58:03.567649 💡 Tips to resolve build issues:
+2026-Mar-04 19:58:03.573077 1. Set these variables as "Runtime only" in the environment variables settings
+2026-Mar-04 19:58:03.578094 2. Use different values for build-time (e.g., NODE_ENV=development for build)
+2026-Mar-04 19:58:03.583728 3. Consider using multi-stage Docker builds to separate build and runtime environments
+2026-Mar-04 19:58:03.592110 ----------------------------------------
+2026-Mar-04 19:58:03.598231 Building docker image started.
+2026-Mar-04 19:58:03.603776 To check the current progress, click on Show Debug Logs.
+2026-Mar-04 19:58:04.367809 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'nixpacks build -c /artifacts/thegameplan.json --cache-key 'qoko4sck4444ssc0coks08o4' --no-error-without-start -n qoko4sck4444ssc0coks08o4:b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f /artifacts/rok00804ggskk84oc4swgc80 -o /artifacts/rok00804ggskk84oc4swgc80'
+2026-Mar-04 19:58:04.367809 [DEBUG] 
+2026-Mar-04 19:58:04.367809 [DEBUG] ╔══════════════════ Nixpacks v1.41.0 ══════════════════╗
+2026-Mar-04 19:58:04.367809 [DEBUG] ║ setup      │ nodejs_20, npm-9_x, openssl, curl, wget ║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║──────────────────────────────────────────────────────║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║ install    │ npm ci                                  ║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║──────────────────────────────────────────────────────║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║ build      │ npm run build                           ║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║──────────────────────────────────────────────────────║
+2026-Mar-04 19:58:04.367809 [DEBUG] ║ start      │ npm run start                           ║
+2026-Mar-04 19:58:04.367809 [DEBUG] ╚══════════════════════════════════════════════════════╝
+2026-Mar-04 19:58:04.371234 [DEBUG] Saved output to:
+2026-Mar-04 19:58:04.371234 [DEBUG] /artifacts/rok00804ggskk84oc4swgc80
+2026-Mar-04 19:58:04.746658 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'cat /artifacts/rok00804ggskk84oc4swgc80/.nixpacks/Dockerfile'
+2026-Mar-04 19:58:04.746658 [DEBUG] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] ENTRYPOINT ["/bin/bash", "-l", "-c"]
+2026-Mar-04 19:58:04.746658 [DEBUG] WORKDIR /app/
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] COPY .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix
+2026-Mar-04 19:58:04.746658 [DEBUG] RUN nix-env -if .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix && nix-collect-garbage -d
+2026-Mar-04 19:58:04.746658 [DEBUG] RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends curl wget
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] ARG ADMIN_EMAIL ADMIN_PASSWORD CI CLOUDINARY_API_KEY CLOUDINARY_API_SECRET CLOUDINARY_CLOUD_NAME COOLIFY_BRANCH COOLIFY_FQDN COOLIFY_RESOURCE_UUID COOLIFY_URL DATABASE_URL MP_ACCESS_TOKEN NEXTAUTH_SECRET NEXTAUTH_URL NIXPACKS_METADATA NIXPACKS_NODE_VERSION NODE_ENV NPM_CONFIG_PRODUCTION RESEND_API_KEY
+2026-Mar-04 19:58:04.746658 [DEBUG] ENV ADMIN_EMAIL=$ADMIN_EMAIL ADMIN_PASSWORD=$ADMIN_PASSWORD CI=$CI CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME COOLIFY_BRANCH=$COOLIFY_BRANCH COOLIFY_FQDN=$COOLIFY_FQDN COOLIFY_RESOURCE_UUID=$COOLIFY_RESOURCE_UUID COOLIFY_URL=$COOLIFY_URL DATABASE_URL=$DATABASE_URL MP_ACCESS_TOKEN=$MP_ACCESS_TOKEN NEXTAUTH_SECRET=$NEXTAUTH_SECRET NEXTAUTH_URL=$NEXTAUTH_URL NIXPACKS_METADATA=$NIXPACKS_METADATA NIXPACKS_NODE_VERSION=$NIXPACKS_NODE_VERSION NODE_ENV=$NODE_ENV NPM_CONFIG_PRODUCTION=$NPM_CONFIG_PRODUCTION RESEND_API_KEY=$RESEND_API_KEY
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] # setup phase
+2026-Mar-04 19:58:04.746658 [DEBUG] # noop
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] # install phase
+2026-Mar-04 19:58:04.746658 [DEBUG] ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
+2026-Mar-04 19:58:04.746658 [DEBUG] COPY . /app/.
+2026-Mar-04 19:58:04.746658 [DEBUG] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] # build phase
+2026-Mar-04 19:58:04.746658 [DEBUG] COPY . /app/.
+2026-Mar-04 19:58:04.746658 [DEBUG] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-next/cache,target=/app/.next/cache --mount=type=cache,id=qoko4sck4444ssc0coks08o4-node_modules/cache,target=/app/node_modules/.cache npm run build
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] # start
+2026-Mar-04 19:58:04.746658 [DEBUG] COPY . /app
+2026-Mar-04 19:58:04.746658 [DEBUG] 
+2026-Mar-04 19:58:04.746658 [DEBUG] CMD ["npm run start"]
+2026-Mar-04 19:58:05.541990 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'cat /artifacts/build.sh'
+2026-Mar-04 19:58:05.541990 [DEBUG] cd /artifacts/rok00804ggskk84oc4swgc80 && set -a && source /artifacts/build-time.env && set +a && docker build --add-host coolify:10.0.1.8 --add-host coolify-db:10.0.1.6 --add-host coolify-realtime:10.0.1.4 --add-host coolify-redis:10.0.1.7 --add-host ec84wg884gwockcs4os4w0o8:10.0.1.3 --network host -f /artifacts/rok00804ggskk84oc4swgc80/.nixpacks/Dockerfile --progress plain -t qoko4sck4444ssc0coks08o4:b7e23e2e9c9b9132ebdd47929edd9e5c311ff30f --build-arg CI --build-arg COOLIFY_BRANCH --build-arg COOLIFY_FQDN --build-arg COOLIFY_RESOURCE_UUID --build-arg COOLIFY_URL --build-arg NIXPACKS_METADATA --build-arg NIXPACKS_NODE_VERSION --build-arg NODE_ENV --build-arg NPM_CONFIG_PRODUCTION --build-arg ADMIN_EMAIL --build-arg DATABASE_URL --build-arg ADMIN_PASSWORD --build-arg NEXTAUTH_SECRET --build-arg NEXTAUTH_URL --build-arg MP_ACCESS_TOKEN --build-arg CLOUDINARY_CLOUD_NAME --build-arg RESEND_API_KEY --build-arg CLOUDINARY_API_KEY --build-arg CLOUDINARY_API_SECRET --build-arg COOLIFY_BUILD_SECRETS_HASH=9cac2cbae124e752536e3803ffd4e6f5ac05da2edfa010e413b2f43fc867cd07 --build-arg 'COOLIFY_URL' --build-arg 'COOLIFY_FQDN' --build-arg 'COOLIFY_BRANCH' --build-arg 'COOLIFY_RESOURCE_UUID' /artifacts/rok00804ggskk84oc4swgc80
+2026-Mar-04 19:58:06.388473 [DEBUG] [CMD]: docker exec rok00804ggskk84oc4swgc80 bash -c 'bash /artifacts/build.sh'
+2026-Mar-04 19:58:06.388473 [DEBUG] #0 building with "default" instance using docker driver
+2026-Mar-04 19:58:06.394284 [DEBUG] #1 [internal] load build definition from Dockerfile
+2026-Mar-04 19:58:06.394284 [DEBUG] #1 transferring dockerfile: 1.93kB done
+2026-Mar-04 19:58:06.394284 [DEBUG] #1 DONE 0.0s
+2026-Mar-04 19:58:06.394284 [DEBUG] 
+2026-Mar-04 19:58:06.394284 [DEBUG] #2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+2026-Mar-04 19:58:06.394284 [DEBUG] #2 DONE 0.1s
+2026-Mar-04 19:58:06.509565 [DEBUG] #3 [internal] load .dockerignore
+2026-Mar-04 19:58:06.509565 [DEBUG] #3 transferring context: 2B done
+2026-Mar-04 19:58:06.509565 [DEBUG] #3 DONE 0.0s
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Mar-04 19:58:06.509565 [DEBUG] #4 DONE 0.0s
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #5 [internal] load build context
+2026-Mar-04 19:58:06.509565 [DEBUG] #5 transferring context: 630.64kB 0.0s done
+2026-Mar-04 19:58:06.509565 [DEBUG] #5 DONE 0.0s
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #6 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix && nix-collect-garbage -d
+2026-Mar-04 19:58:06.509565 [DEBUG] #6 CACHED
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #7 [stage-0  2/11] WORKDIR /app/
+2026-Mar-04 19:58:06.509565 [DEBUG] #7 CACHED
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #8 [stage-0  3/11] COPY .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix
+2026-Mar-04 19:58:06.509565 [DEBUG] #8 CACHED
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #9 [stage-0  5/11] RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends curl wget
+2026-Mar-04 19:58:06.509565 [DEBUG] #9 CACHED
+2026-Mar-04 19:58:06.509565 [DEBUG] 
+2026-Mar-04 19:58:06.509565 [DEBUG] #10 [stage-0  6/11] COPY . /app/.
+2026-Mar-04 19:58:06.509565 [DEBUG] #10 DONE 0.0s
+2026-Mar-04 19:58:06.661712 [DEBUG] #11 [stage-0  7/11] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci
+2026-Mar-04 19:58:06.677472 [DEBUG] #11 0.166 npm warn config production Use `--omit=dev` instead.
+2026-Mar-04 19:58:15.696363 [DEBUG] #11 9.019 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-Mar-04 19:58:28.583821 [DEBUG] #11 22.04
+2026-Mar-04 19:58:28.583821 [DEBUG] #11 22.04 > indumentaria-moon@0.1.0 postinstall
+2026-Mar-04 19:58:28.583821 [DEBUG] #11 22.04 > prisma generate
+2026-Mar-04 19:58:28.583821 [DEBUG] #11 22.04
+2026-Mar-04 19:58:30.115944 [DEBUG] #11 23.60 Loaded Prisma config from prisma.config.ts.
+2026-Mar-04 19:58:30.115944 [DEBUG] #11 23.60
+2026-Mar-04 19:58:30.404031 [DEBUG] #11 23.89 Prisma schema loaded from prisma/schema.prisma.
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 Error: Prisma schema validation - (get-config wasm)
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 Error code: P1012
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 error: The datasource property `url` is no longer supported in schema files. Move connection URLs for Migrate to `prisma.config.ts` and pass either `adapter` for a direct database connection or `accelerateUrl` for Accelerate to the `PrismaClient` constructor. See https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90   -->  prisma/schema.prisma:8
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90    |
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90  7 |   provider = "postgresql"
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90  8 |   url      = env("DATABASE_URL")
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90    |
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 Validation Error Count: 1
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 [Context: getConfig]
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.90 Prisma CLI Version : 7.4.2
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.93 npm error code 1
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.93 npm error path /app
+2026-Mar-04 19:58:30.600835 [DEBUG] #11 23.93 npm error command failed
+2026-Mar-04 19:58:30.608633 [DEBUG] #11 23.93 npm error command sh -c prisma generate
+2026-Mar-04 19:58:30.608633 [DEBUG] #11 23.93 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-04T19_58_06_643Z-debug-0.log
+2026-Mar-04 19:58:30.735221 [DEBUG] #11 ERROR: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Mar-04 19:58:30.891719 [DEBUG] ------
+2026-Mar-04 19:58:30.891719 [DEBUG] > [stage-0  7/11] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci:
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.90
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.90 Validation Error Count: 1
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.90 [Context: getConfig]
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.90
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.90 Prisma CLI Version : 7.4.2
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.93 npm error code 1
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.93 npm error path /app
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.93 npm error command failed
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.93 npm error command sh -c prisma generate
+2026-Mar-04 19:58:30.891719 [DEBUG] 23.93 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-04T19_58_06_643Z-debug-0.log
+2026-Mar-04 19:58:30.891719 [DEBUG] ------
+2026-Mar-04 19:58:30.898223 [DEBUG] 
+2026-Mar-04 19:58:30.902941 [DEBUG] 1 warning found (use docker --debug to expand):
+2026-Mar-04 19:58:30.902941 [DEBUG] - UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 18)
+2026-Mar-04 19:58:30.928510 [DEBUG] Dockerfile:20
+2026-Mar-04 19:58:30.928510 [DEBUG] --------------------
+2026-Mar-04 19:58:30.928510 [DEBUG] 18 |     ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
+2026-Mar-04 19:58:30.928510 [DEBUG] 19 |     COPY . /app/.
+2026-Mar-04 19:58:30.928510 [DEBUG] 20 | >>> RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci
+2026-Mar-04 19:58:30.928510 [DEBUG] 21 |
+2026-Mar-04 19:58:30.928510 [DEBUG] 22 |     # build phase
+2026-Mar-04 19:58:30.928510 [DEBUG] --------------------
+2026-Mar-04 19:58:30.928510 [DEBUG] ERROR: failed to build: failed to solve: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Mar-04 19:58:30.958527 [DEBUG] exit status 1
+2026-Mar-04 19:58:31.556674 ========================================
+2026-Mar-04 19:58:31.579526 Deployment failed: Command execution failed (exit code 1): docker exec rok00804ggskk84oc4swgc80 bash -c 'bash /artifacts/build.sh'
+2026-Mar-04 19:58:31.579526 Error: #0 building with "default" instance using docker driver
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #1 [internal] load build definition from Dockerfile
+2026-Mar-04 19:58:31.579526 #1 transferring dockerfile: 1.93kB done
+2026-Mar-04 19:58:31.579526 #1 DONE 0.0s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+2026-Mar-04 19:58:31.579526 #2 DONE 0.1s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #3 [internal] load .dockerignore
+2026-Mar-04 19:58:31.579526 #3 transferring context: 2B done
+2026-Mar-04 19:58:31.579526 #3 DONE 0.0s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Mar-04 19:58:31.579526 #4 DONE 0.0s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #5 [internal] load build context
+2026-Mar-04 19:58:31.579526 #5 transferring context: 630.64kB 0.0s done
+2026-Mar-04 19:58:31.579526 #5 DONE 0.0s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #6 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix && nix-collect-garbage -d
+2026-Mar-04 19:58:31.579526 #6 CACHED
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #7 [stage-0  2/11] WORKDIR /app/
+2026-Mar-04 19:58:31.579526 #7 CACHED
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #8 [stage-0  3/11] COPY .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix .nixpacks/nixpkgs-23f9169c4ccce521379e602cc82ed873a1f1b52b.nix
+2026-Mar-04 19:58:31.579526 #8 CACHED
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #9 [stage-0  5/11] RUN sudo apt-get update && sudo apt-get install -y --no-install-recommends curl wget
+2026-Mar-04 19:58:31.579526 #9 CACHED
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #10 [stage-0  6/11] COPY . /app/.
+2026-Mar-04 19:58:31.579526 #10 DONE 0.0s
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 #11 [stage-0  7/11] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci
+2026-Mar-04 19:58:31.579526 #11 0.166 npm warn config production Use `--omit=dev` instead.
+2026-Mar-04 19:58:31.579526 #11 9.019 npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2026-Mar-04 19:58:31.579526 #11 22.04
+2026-Mar-04 19:58:31.579526 #11 22.04 > indumentaria-moon@0.1.0 postinstall
+2026-Mar-04 19:58:31.579526 #11 22.04 > prisma generate
+2026-Mar-04 19:58:31.579526 #11 22.04
+2026-Mar-04 19:58:31.579526 #11 23.60 Loaded Prisma config from prisma.config.ts.
+2026-Mar-04 19:58:31.579526 #11 23.60
+2026-Mar-04 19:58:31.579526 #11 23.89 Prisma schema loaded from prisma/schema.prisma.
+2026-Mar-04 19:58:31.579526 #11 23.90 Error: Prisma schema validation - (get-config wasm)
+2026-Mar-04 19:58:31.579526 #11 23.90 Error code: P1012
+2026-Mar-04 19:58:31.579526 #11 23.90 error: The datasource property `url` is no longer supported in schema files. Move connection URLs for Migrate to `prisma.config.ts` and pass either `adapter` for a direct database connection or `accelerateUrl` for Accelerate to the `PrismaClient` constructor. See https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
+2026-Mar-04 19:58:31.579526 #11 23.90   -->  prisma/schema.prisma:8
+2026-Mar-04 19:58:31.579526 #11 23.90    |
+2026-Mar-04 19:58:31.579526 #11 23.90  7 |   provider = "postgresql"
+2026-Mar-04 19:58:31.579526 #11 23.90  8 |   url      = env("DATABASE_URL")
+2026-Mar-04 19:58:31.579526 #11 23.90    |
+2026-Mar-04 19:58:31.579526 #11 23.90
+2026-Mar-04 19:58:31.579526 #11 23.90 Validation Error Count: 1
+2026-Mar-04 19:58:31.579526 #11 23.90 [Context: getConfig]
+2026-Mar-04 19:58:31.579526 #11 23.90
+2026-Mar-04 19:58:31.579526 #11 23.90 Prisma CLI Version : 7.4.2
+2026-Mar-04 19:58:31.579526 #11 23.93 npm error code 1
+2026-Mar-04 19:58:31.579526 #11 23.93 npm error path /app
+2026-Mar-04 19:58:31.579526 #11 23.93 npm error command failed
+2026-Mar-04 19:58:31.579526 #11 23.93 npm error command sh -c prisma generate
+2026-Mar-04 19:58:31.579526 #11 23.93 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-04T19_58_06_643Z-debug-0.log
+2026-Mar-04 19:58:31.579526 #11 ERROR: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Mar-04 19:58:31.579526 ------
+2026-Mar-04 19:58:31.579526 > [stage-0  7/11] RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci:
+2026-Mar-04 19:58:31.579526 23.90
+2026-Mar-04 19:58:31.579526 23.90 Validation Error Count: 1
+2026-Mar-04 19:58:31.579526 23.90 [Context: getConfig]
+2026-Mar-04 19:58:31.579526 23.90
+2026-Mar-04 19:58:31.579526 23.90 Prisma CLI Version : 7.4.2
+2026-Mar-04 19:58:31.579526 23.93 npm error code 1
+2026-Mar-04 19:58:31.579526 23.93 npm error path /app
+2026-Mar-04 19:58:31.579526 23.93 npm error command failed
+2026-Mar-04 19:58:31.579526 23.93 npm error command sh -c prisma generate
+2026-Mar-04 19:58:31.579526 23.93 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-04T19_58_06_643Z-debug-0.log
+2026-Mar-04 19:58:31.579526 ------
+2026-Mar-04 19:58:31.579526 
+2026-Mar-04 19:58:31.579526 1 warning found (use docker --debug to expand):
+2026-Mar-04 19:58:31.579526 - UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 18)
+2026-Mar-04 19:58:31.579526 Dockerfile:20
+2026-Mar-04 19:58:31.579526 --------------------
+2026-Mar-04 19:58:31.579526 18 |     ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
+2026-Mar-04 19:58:31.579526 19 |     COPY . /app/.
+2026-Mar-04 19:58:31.579526 20 | >>> RUN --mount=type=cache,id=qoko4sck4444ssc0coks08o4-/root/npm,target=/root/.npm npm ci
+2026-Mar-04 19:58:31.579526 21 |
+2026-Mar-04 19:58:31.579526 22 |     # build phase
+2026-Mar-04 19:58:31.579526 --------------------
+2026-Mar-04 19:58:31.579526 ERROR: failed to build: failed to solve: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Mar-04 19:58:31.579526 exit status 1
+2026-Mar-04 19:58:31.588747 [DEBUG] Error type: RuntimeException
+2026-Mar-04 19:58:31.598208 [DEBUG] Error code: 0
+2026-Mar-04 19:58:31.606738 [DEBUG] Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:243
+2026-Mar-04 19:58:31.614874 [DEBUG] Stack trace (first 5 lines):
+2026-Mar-04 19:58:31.623791 [DEBUG] #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(104): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Mar-04 19:58:31.632130 [DEBUG] #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(272): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():71}()
+2026-Mar-04 19:58:31.640828 [DEBUG] #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(71): Illuminate\Support\Collection->each()
+2026-Mar-04 19:58:31.646452 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3118): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Mar-04 19:58:31.652955 [DEBUG] #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(888): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Mar-04 19:58:31.658963 ========================================
+2026-Mar-04 19:58:31.667288 Deployment failed. Removing the new version of your application.
+2026-Mar-04 19:58:33.297066 Gracefully shutting down build container: rok00804ggskk84oc4swgc80
+2026-Mar-04 19:58:33.849074 [DEBUG] [CMD]: docker stop -t 30 rok00804ggskk84oc4swgc80
+2026-Mar-04 19:58:33.849074 [DEBUG] rok00804ggskk84oc4swgc80
