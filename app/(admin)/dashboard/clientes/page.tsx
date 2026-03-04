@@ -33,12 +33,12 @@ export default function ClientesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">👥 Clientes</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">👥 Clientes</h1>
 
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-        <div className="p-6 border-b">
-          <h2 className="font-semibold">Listado de Registros ({clientes.length})</h2>
-          <p className="text-sm text-gray-500 mt-1">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-800 overflow-hidden">
+        <div className="p-6 border-b border-gray-200 dark:border-zinc-800">
+          <h2 className="font-semibold dark:text-white">Listado de Registros ({clientes.length})</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Usuarios que han realizado al menos un proceso de checkout en la tienda.
           </p>
         </div>
@@ -49,8 +49,8 @@ export default function ClientesPage() {
               Todavía no hay clientes registrados.
             </div>
           ) : (
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+            <table className="w-full text-sm text-left dark:text-gray-300">
+              <thead className="bg-gray-50 dark:bg-zinc-950 text-gray-500 dark:text-gray-400 uppercase text-xs">
                 <tr>
                   <th className="px-6 py-4 font-medium">Cliente</th>
                   <th className="px-6 py-4 font-medium">Contacto</th>

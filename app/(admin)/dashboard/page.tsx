@@ -53,18 +53,18 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border">
+          <div key={stat.label} className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
             <div className="text-3xl mb-2">{stat.icon}</div>
-            <div className="text-2xl font-bold">{stat.value}</div>
-            <div className="text-gray-500 text-sm">{stat.label}</div>
+            <div className="text-2xl font-bold dark:text-white">{stat.value}</div>
+            <div className="text-gray-500 dark:text-gray-400 text-sm">{stat.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm border">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="font-semibold">Últimas órdenes</h2>
-          <Link href="/dashboard/ordenes" className="text-xs text-blue-500 hover:underline">
+          <h2 className="font-semibold dark:text-white">Últimas órdenes</h2>
+          <Link href="/dashboard/ordenes" className="text-xs text-blue-500 hover:text-blue-400 hover:underline">
             Ver todas
           </Link>
         </div>
@@ -76,26 +76,25 @@ export default function DashboardPage() {
             {data.recentOrders.map((order) => (
               <div
                 key={order.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
               >
                 <div>
-                  <p className="font-bold text-sm">#{order.orderNumber}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="font-bold text-sm dark:text-white">#{order.orderNumber}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {order.customer?.name || "Invitado"} · {new Date(order.createdAt).toLocaleDateString("es-AR")}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-sm">
+                  <p className="font-bold text-sm dark:text-white">
                     ${order.total.toLocaleString("es-AR")}
                   </p>
-                  <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${
-                    order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                    order.status === 'paid' ? 'bg-green-100 text-green-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {order.status === 'pending' ? 'Pendiente' : 
-                     order.status === 'paid' ? 'Pagado' : 
-                     order.status}
+                  <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
+                      order.status === 'paid' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
+                        'bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-gray-300'
+                    }`}>
+                    {order.status === 'pending' ? 'Pendiente' :
+                      order.status === 'paid' ? 'Pagado' :
+                        order.status}
                   </span>
                 </div>
               </div>

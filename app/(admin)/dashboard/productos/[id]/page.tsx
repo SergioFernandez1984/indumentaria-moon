@@ -176,14 +176,14 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
-        <Link href="/dashboard/productos" className="text-gray-500 hover:text-black">
+        <Link href="/dashboard/productos" className="text-gray-500 hover:text-gray-300 transition-colors">
           ← Volver
         </Link>
-        <h1 className="text-2xl font-bold">Editar: {producto.name}</h1>
+        <h1 className="text-2xl font-bold dark:text-white">Editar: {producto.name}</h1>
       </div>
 
-      <div className="bg-white rounded-xl p-6 shadow-sm border mb-8 max-w-lg">
-        <h2 className="font-semibold mb-4">Editar producto</h2>
+      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800 mb-8 max-w-lg">
+        <h2 className="font-semibold mb-4 dark:text-white">Editar producto</h2>
         <form onSubmit={handleUpdateProducto} className="flex flex-col gap-4">
           <div>
             <Label htmlFor="edit-name">Nombre</Label>
@@ -262,8 +262,8 @@ export default function ProductoEditPage({ params }: { params: Promise<{ id: str
           </div>
 
           {/* Variantes */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="font-semibold mb-4 text-lg">Variantes (Talle/Color/Stock)</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
+            <h2 className="font-semibold mb-4 text-lg dark:text-white">Variantes (Talle/Color/Stock)</h2>
 
             <div className="flex flex-col gap-3 mb-8">
               {producto.variants.length === 0 && (

@@ -101,12 +101,12 @@ export default function ProductosPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Productos</h1>
+      <h1 className="text-2xl font-bold mb-6 dark:text-white">Productos</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Formulario */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border">
-          <h2 className="font-semibold mb-4">Nuevo producto</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
+          <h2 className="font-semibold mb-4 dark:text-white">Nuevo producto</h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
@@ -189,8 +189,8 @@ export default function ProductosPage() {
         </div>
 
         {/* Lista de productos */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border">
-          <h2 className="font-semibold mb-4">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
+          <h2 className="font-semibold mb-4 dark:text-white">
             Productos ({productos.length})
           </h2>
           <div className="flex flex-col gap-3">
@@ -200,7 +200,7 @@ export default function ProductosPage() {
             {productos.map((p) => (
               <div
                 key={p.id}
-                className="flex items-center gap-3 p-3 border rounded-lg"
+                className="flex items-center gap-3 p-3 border border-gray-200 dark:border-zinc-800 rounded-lg dark:hover:bg-zinc-800 transition-colors"
               >
                 {p.images[0] ? (
                   <img
@@ -209,12 +209,12 @@ export default function ProductosPage() {
                     className="w-14 h-14 object-cover rounded-lg"
                   />
                 ) : (
-                  <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
+                  <div className="w-14 h-14 bg-gray-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center text-2xl">
                     👗
                   </div>
                 )}
                 <div className="flex-1">
-                  <p className="font-medium text-sm">{p.name}</p>
+                  <p className="font-medium text-sm dark:text-white">{p.name}</p>
                   <p className="text-gray-500 text-xs">
                     ${p.salePrice != null ? p.salePrice.toLocaleString("es-AR") : p.basePrice.toLocaleString("es-AR")}
                   </p>

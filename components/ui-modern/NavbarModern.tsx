@@ -17,13 +17,13 @@ export default function NavbarModern() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     href="/"
-                    className="relative block w-32 h-12"
+                    className="relative block w-48 h-16"
                 >
                     <Image
                         src="/logo.png"
                         alt="Moon Indumentaria Logo"
                         fill
-                        className="object-contain"
+                        className="object-contain mix-blend-screen"
                         priority
                     />
                 </motion.a>
