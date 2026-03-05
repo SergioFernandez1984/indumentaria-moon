@@ -23,7 +23,7 @@ export default function NavbarModern() {
                         src="/logo.png"
                         alt="Moon Indumentaria Logo"
                         fill
-                        className="object-contain scale-[1.7] mix-blend-screen drop-shadow-md"
+                        className="object-contain scale-[1.7] mix-blend-screen contrast-125 brightness-[0.85] drop-shadow-md"
                         priority
                     />
                 </motion.a>
