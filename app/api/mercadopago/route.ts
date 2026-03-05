@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const preference = new Preference(client);
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
     const result = await preference.create({
       body: {
@@ -25,10 +26,10 @@ export async function POST(request: Request) {
           email: body.customer.email,
         },
         back_urls: {
-           success: `https://www.indumentariamoon.com/checkout/confirmacion?orden=${body.orderNumber}`,
-         },
-         auto_return: "approved",
-         notification_url: `https://www.indumentariamoon.com/api/mercadopago/webhook?orden=${body.orderNumber}`,
+          success: `${baseUrl}/checkout/confirmacion?orden=${body.orderNumber}`,
+        },
+        auto_return: "approved",
+        notification_url: `${baseUrl}/api/mercadopago/webhook?orden=${body.orderNumber}`,
         external_reference: body.orderNumber,
       },
     });
