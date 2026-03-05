@@ -9,12 +9,22 @@ interface Producto {
   images: { url: string; altText: string | null }[];
 }
 
-async function getProductos(): Promise<Producto[]> {
-  const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/productos`, {
-    cache: "no-store",
+import { prisma } from "@/lib/prisma";
+
+async function getProductos() {
+  const productos = await prisma.product.findMany({
+    where: { isActive: true },
+    include: {
+      images: {
+        where: { isPrimary: true },
+        take: 1,
+      },
+      variants: true,
+      category: true,
+    },
+    orderBy: { createdAt: "desc" },
   });
-  return res.json();
+  return productos;
 }
 
 export default async function ProductosPage() {
