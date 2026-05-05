@@ -1,6 +1,15 @@
 import { Resend } from "resend"; 
  
- const resend = new Resend(process.env.RESEND_API_KEY); 
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.warn("RESEND_API_KEY no esta configurada. Se omite el envio de email.");
+    return null;
+  }
+
+  return new Resend(apiKey);
+}
  
  export async function enviarConfirmacionOrden({ 
    email, 
@@ -52,6 +61,9 @@ import { Resend } from "resend";
        </div> 
      `; 
  
+   const resend = getResendClient();
+   if (!resend) return;
+
    await resend.emails.send({ 
      from: "Indumentaria Moon <onboarding@resend.dev>", 
      to: email, 

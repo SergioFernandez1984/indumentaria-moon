@@ -1,13 +1,6 @@
-import Image from "next/image";
+import Link from "next/link";
 
-interface Producto {
-  id: string;
-  name: string;
-  slug: string;
-  basePrice: number;
-  salePrice: number | null;
-  images: { url: string; altText: string | null }[];
-}
+export const dynamic = "force-dynamic";
 
 import { prisma } from "@/lib/prisma";
 
@@ -40,7 +33,7 @@ export default async function ProductosPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {productos.map((p) => (
-          <a
+          <Link
             key={p.id}
             href={`/productos/${p.slug}`}
             className="group cursor-pointer"
@@ -69,7 +62,7 @@ export default async function ProductosPage() {
                 </span>
               )}
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>

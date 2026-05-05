@@ -3,18 +3,13 @@ import { prisma } from "@/lib/prisma";
 import AddToCartButton from "./AddToCartButton";
 import ProductGallery from "@/components/ui-modern/ProductGallery";
 
+export const dynamic = "force-dynamic";
+
 interface ProductVariant {
   id: string;
   size: string;
   color: string;
   stock: number;
-}
-
-interface ProductImage {
-  id: string;
-  url: string;
-  altText: string | null;
-  sortOrder: number;
 }
 
 interface Props {
