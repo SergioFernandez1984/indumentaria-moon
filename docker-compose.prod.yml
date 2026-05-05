@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://moon:${POSTGRES_PASSWORD}@db:5432/indumentaria_moon
+      AUTH_SECRET: ${AUTH_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+    volumes:
+      - moon_uploads:/app/public/uploads/productos
+    depends_on:
+      - db
+    ports:
+      - "${APP_PORT:-3002}:3000"
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: indumentaria_moon
+      POSTGRES_USER: moon
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - moon_postgres:/var/lib/postgresql/data
+
+volumes:
+  moon_uploads:
+  moon_postgres:

@@ -6,18 +6,14 @@ export default function ShopLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-stone-50 text-zinc-950">
       <NavbarModern />
-
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8">
-        {children}
-      </main>
-
-      <footer className="border-t mt-auto">
-        <div className="max-w-6xl mx-auto px-4 py-8 text-center text-sm text-gray-500">
-          © 2025 Indumentaria Moon · Todos los derechos reservados
+      <main className="mx-auto w-full max-w-6xl px-4 py-8">{children}</main>
+      <footer className="border-t border-zinc-200 bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-8 text-center text-sm text-zinc-500">
+          © 2026 Indumentaria Moon · Envios a todo el pais excepto Ushuaia
         </div>
       </footer>
     </div>
   );
-} 
+}

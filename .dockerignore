@@ -1,0 +1,10 @@
+.git
+.next
+node_modules
+npm-debug.log
+Dockerfile
+docker-compose*.yml
+.env
+.env.*
+public/uploads/productos/*
+!public/uploads/productos/.gitkeep

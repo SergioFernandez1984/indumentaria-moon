@@ -1,19 +1,20 @@
-export default function HomePage() { 
-  return ( 
-    <div> 
-      <section className="text-center py-20"> 
-        <h1 className="text-5xl font-bold mb-4">Nueva Colección</h1> 
-        <p className="text-gray-500 text-lg mb-8"> 
-          Descubrí las últimas tendencias de Indumentaria Moon 
-        </p> 
-        
-        <a 
-          href="/productos" 
-          className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors" 
-        > 
-          Ver productos 
-        </a> 
-      </section> 
-    </div> 
-  ); 
-} 
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
+export default function ShopHomePage() {
+  return (
+    <section className="py-20">
+      <div className="max-w-2xl">
+        <p className="mb-4 text-sm uppercase tracking-[0.2em] text-zinc-500">Nueva coleccion</p>
+        <h1 className="mb-4 text-5xl font-black">Indumentaria Moon</h1>
+        <p className="mb-8 text-lg text-zinc-500">
+          Descubri productos seleccionados, elegi talle y color, y finaliza tu compra con envio a domicilio.
+        </p>
+        <Link href="/productos" className="inline-flex items-center gap-2 bg-zinc-950 px-8 py-3 font-bold text-white">
+          Ver productos
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
+    </section>
+  );
+}

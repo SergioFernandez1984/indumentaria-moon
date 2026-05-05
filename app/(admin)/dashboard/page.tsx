@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CircleDollarSign, Package, ShoppingBag, Users } from "lucide-react";
 
 interface DashboardStats {
   metrics: {
@@ -27,81 +28,69 @@ export default function DashboardPage() {
   useEffect(() => {
     fetch("/api/admin/dashboard")
       .then((res) => res.json())
-      .then((data) => {
-        setData(data);
+      .then((stats) => {
+        setData(stats);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="p-8 text-gray-500">Cargando dashboard...</div>;
-  if (!data) return <div className="p-8 text-red-500">Error al cargar el dashboard.</div>;
+  if (!data) return <div className="p-8 text-red-400">Error al cargar el dashboard.</div>;
 
   const stats = [
-    { label: "Ventas hoy", value: `$${data.metrics.salesToday.toLocaleString("es-AR")}`, icon: "💰" },
-    { label: "Órdenes pendientes", value: data.metrics.pendingOrders.toString(), icon: "📦" },
-    { label: "Productos activos", value: data.metrics.activeProducts.toString(), icon: "👗" },
-    { label: "Clientes", value: data.metrics.totalCustomers.toString(), icon: "👥" },
+    { label: "Ventas hoy", value: `$${data.metrics.salesToday.toLocaleString("es-AR")}`, icon: CircleDollarSign },
+    { label: "Ordenes pendientes", value: data.metrics.pendingOrders.toString(), icon: ShoppingBag },
+    { label: "Productos activos", value: data.metrics.activeProducts.toString(), icon: Package },
+    { label: "Clientes", value: data.metrics.totalCustomers.toString(), icon: Users },
   ];
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+    <div className="space-y-8">
+      <div>
+        <p className="text-sm uppercase tracking-[0.2em] text-gray-400">Resumen</p>
+        <h1 className="mt-2 text-2xl font-bold text-white">Dashboard</h1>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
-            <div className="text-3xl mb-2">{stat.icon}</div>
-            <div className="text-2xl font-bold dark:text-white">{stat.value}</div>
-            <div className="text-gray-500 dark:text-gray-400 text-sm">{stat.label}</div>
+          <div key={stat.label} className="border border-zinc-800 bg-zinc-900 p-6">
+            <stat.icon className="mb-4 size-6 text-gray-400" />
+            <div className="text-2xl font-bold text-white">{stat.value}</div>
+            <div className="text-sm text-gray-400">{stat.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="font-semibold dark:text-white">Últimas órdenes</h2>
-          <Link href="/dashboard/ordenes" className="text-xs text-blue-500 hover:text-blue-400 hover:underline">
+      <section className="border border-zinc-800 bg-zinc-900 p-6">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="font-semibold text-white">Ultimas ordenes</h2>
+          <Link href="/dashboard/ordenes" className="text-xs text-gray-300 underline underline-offset-4 hover:text-white">
             Ver todas
           </Link>
         </div>
 
         {data.recentOrders.length === 0 ? (
-          <p className="text-gray-400 text-sm py-4">No hay órdenes todavía.</p>
+          <p className="py-4 text-sm text-gray-400">No hay ordenes todavia.</p>
         ) : (
           <div className="flex flex-col gap-2">
             {data.recentOrders.map((order) => (
-              <div
-                key={order.id}
-                className="flex items-center justify-between p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
-              >
+              <div key={order.id} className="flex items-center justify-between border border-zinc-800 p-4">
                 <div>
-                  <p className="font-bold text-sm dark:text-white">#{order.orderNumber}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-sm font-bold text-white">#{order.orderNumber}</p>
+                  <p className="text-xs text-gray-400">
                     {order.customer?.name || "Invitado"} · {new Date(order.createdAt).toLocaleDateString("es-AR")}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-sm dark:text-white">
-                    ${order.total.toLocaleString("es-AR")}
-                  </p>
-                  <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${order.status === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
-                      order.status === 'paid' ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' :
-                        'bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-gray-300'
-                    }`}>
-                    {order.status === 'pending' ? 'Pendiente' :
-                      order.status === 'paid' ? 'Pagado' :
-                        order.status}
-                  </span>
+                  <p className="text-sm font-bold text-white">${order.total.toLocaleString("es-AR")}</p>
+                  <span className="text-[10px] uppercase text-gray-400">{order.status}</span>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

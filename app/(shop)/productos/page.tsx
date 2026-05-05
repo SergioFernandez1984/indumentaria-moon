@@ -1,15 +1,14 @@
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-import { prisma } from "@/lib/prisma";
-
 async function getProductos() {
-  const productos = await prisma.product.findMany({
+  return prisma.product.findMany({
     where: { isActive: true },
     include: {
       images: {
-        where: { isPrimary: true },
+        orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }],
         take: 1,
       },
       variants: true,
@@ -17,7 +16,6 @@ async function getProductos() {
     },
     orderBy: { createdAt: "desc" },
   });
-  return productos;
 }
 
 export default async function ProductosPage() {
@@ -25,46 +23,55 @@ export default async function ProductosPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">Productos</h1>
+      <div className="mb-8 flex flex-col gap-2">
+        <p className="text-sm uppercase tracking-[0.2em] text-zinc-500">Catalogo</p>
+        <h1 className="text-4xl font-black">Productos</h1>
+        <p className="max-w-2xl text-sm text-zinc-500">
+          Elegi talle y color desde cada producto. El stock se confirma al finalizar el pedido.
+        </p>
+      </div>
 
       {productos.length === 0 && (
-        <p className="text-gray-400">No hay productos disponibles.</p>
+        <div className="border border-zinc-200 bg-white p-10 text-center">
+          <p className="font-semibold">Todavia no hay productos disponibles.</p>
+          <p className="mt-2 text-sm text-zinc-500">Cuando cargues el catalogo desde el admin van a aparecer aca.</p>
+        </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {productos.map((p) => (
-          <Link
-            key={p.id}
-            href={`/productos/${p.slug}`}
-            className="group cursor-pointer"
-          >
-            <div className="aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden mb-3 relative">
-              {p.images[0] ? (
-                <img
-                  src={p.images[0].url}
-                  alt={p.images[0].altText ?? p.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-5xl">
-                  👗
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {productos.map((p) => {
+          const stock = p.variants.reduce((sum, variant) => sum + variant.stock, 0);
+
+          return (
+            <Link key={p.id} href={`/productos/${p.slug}`} className="group bg-white">
+              <div className="relative mb-3 aspect-[3/4] overflow-hidden bg-zinc-100">
+                {p.images[0] ? (
+                  <img
+                    src={p.images[0].url}
+                    alt={p.images[0].altText ?? p.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-zinc-200" />
+                )}
+                {stock === 0 && (
+                  <span className="absolute left-2 top-2 bg-zinc-950 px-2 py-1 text-xs font-bold text-white">
+                    Sin stock
+                  </span>
+                )}
+              </div>
+              <div className="px-1 pb-2">
+                <p className="text-xs uppercase tracking-[0.16em] text-zinc-400">{p.category?.name ?? "Moon"}</p>
+                <h3 className="mt-1 line-clamp-2 text-sm font-semibold">{p.name}</h3>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="font-bold">${(p.salePrice ?? p.basePrice).toLocaleString("es-AR")}</span>
+                  {p.salePrice && <span className="text-xs text-zinc-400 line-through">${p.basePrice.toLocaleString("es-AR")}</span>}
                 </div>
-              )}
-            </div>
-            <h3 className="font-medium text-sm">{p.name}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="font-bold text-sm">
-                ${(p.salePrice ?? p.basePrice).toLocaleString("es-AR")}
-              </span>
-              {p.salePrice && (
-                <span className="text-gray-400 text-xs line-through">
-                  ${p.basePrice.toLocaleString("es-AR")}
-                </span>
-              )}
-            </div>
-          </Link>
-        ))}
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
-} 
+}

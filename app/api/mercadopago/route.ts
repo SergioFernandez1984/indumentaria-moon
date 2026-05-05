@@ -1,12 +1,28 @@
 import { NextResponse } from "next/server";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
+interface MercadoPagoItem {
+  variantId: string;
+  productName: string;
+  variantSize?: string;
+  variantColor?: string;
+  quantity: number;
+  unitPrice: number;
+}
+
 const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
+  accessToken: process.env.MP_ACCESS_TOKEN ?? "",
 });
 
 export async function POST(request: Request) {
   try {
+    if (!process.env.MP_ACCESS_TOKEN) {
+      return NextResponse.json(
+        { error: "Falta configurar MP_ACCESS_TOKEN" },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
 
     const preference = new Preference(client);
@@ -14,7 +30,7 @@ export async function POST(request: Request) {
 
     const result = await preference.create({
       body: {
-        items: body.items.map((item: any) => ({
+        items: (body.items as MercadoPagoItem[]).map((item) => ({
           id: item.variantId,
           title: `${item.productName} - Talle: ${item.variantSize} / Color: ${item.variantColor}`,
           quantity: Number(item.quantity),
@@ -27,6 +43,8 @@ export async function POST(request: Request) {
         },
         back_urls: {
           success: `${baseUrl}/checkout/confirmacion?orden=${body.orderNumber}`,
+          failure: `${baseUrl}/checkout?error=pago`,
+          pending: `${baseUrl}/checkout/confirmacion?orden=${body.orderNumber}`,
         },
         auto_return: "approved",
         notification_url: `${baseUrl}/api/mercadopago/webhook?orden=${body.orderNumber}`,

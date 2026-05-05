@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import AddToCartButton from "./AddToCartButton";
 import ProductGallery from "@/components/ui-modern/ProductGallery";
+import AddToCartButton from "./AddToCartButton";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +10,7 @@ interface ProductVariant {
   size: string;
   color: string;
   stock: number;
+  extraPrice: number;
 }
 
 interface Props {
@@ -22,7 +23,7 @@ export default async function ProductoPage({ params }: Props) {
   const producto = await prisma.product.findUnique({
     where: { slug },
     include: {
-      images: { orderBy: { sortOrder: "asc" } },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }] },
       variants: true,
       category: true,
     },
@@ -30,49 +31,37 @@ export default async function ProductoPage({ params }: Props) {
 
   if (!producto) notFound();
 
-  const sizes: string[] = [...new Set<string>(
-    producto.variants.map((v: ProductVariant) => v.size)
-  )];
-  const colors: string[] = [...new Set<string>(
-    producto.variants.map((v: ProductVariant) => v.color)
-  )];
+  const sizes: string[] = [...new Set(producto.variants.map((v: ProductVariant) => v.size))];
+  const colors: string[] = [...new Set(producto.variants.map((v: ProductVariant) => v.color))];
+  const stock = producto.variants.reduce((sum, variant) => sum + variant.stock, 0);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-      {/* Galería de Imágenes */}
-      <div className="flex flex-col gap-3">
-        <ProductGallery images={producto.images} productName={producto.name} />
-      </div>
+    <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+      <ProductGallery images={producto.images} productName={producto.name} />
 
-      {/* Info del producto */}
       <div className="flex flex-col gap-6">
         {producto.category && (
-          <span className="text-sm text-gray-400 uppercase tracking-wider">
-            {producto.category.name}
-          </span>
+          <span className="text-sm uppercase tracking-[0.2em] text-zinc-400">{producto.category.name}</span>
         )}
 
-        <h1 className="text-3xl font-bold">{producto.name}</h1>
+        <div>
+          <h1 className="text-4xl font-black">{producto.name}</h1>
+          <p className="mt-2 text-sm text-zinc-500">
+            {stock > 0 ? `${stock} unidades disponibles` : "Sin stock disponible"}
+          </p>
+        </div>
 
         <div className="flex items-center gap-3">
           <span className="text-2xl font-bold">
             ${(producto.salePrice ?? producto.basePrice).toLocaleString("es-AR")}
           </span>
           {producto.salePrice && (
-            <span className="text-gray-400 line-through text-lg">
-              ${producto.basePrice.toLocaleString("es-AR")}
-            </span>
+            <span className="text-lg text-zinc-400 line-through">${producto.basePrice.toLocaleString("es-AR")}</span>
           )}
-          {producto.salePrice && (
-            <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-medium">
-              OFERTA
-            </span>
-          )}
+          {producto.salePrice && <span className="bg-red-100 px-2 py-1 text-xs font-medium text-red-600">OFERTA</span>}
         </div>
 
-        {producto.description && (
-          <p className="text-gray-600 leading-relaxed">{producto.description}</p>
-        )}
+        {producto.description && <p className="leading-relaxed text-zinc-600">{producto.description}</p>}
 
         <AddToCartButton
           producto={{
@@ -89,6 +78,7 @@ export default async function ProductoPage({ params }: Props) {
             size: v.size,
             color: v.color,
             stock: v.stock,
+            extraPrice: v.extraPrice,
           }))}
         />
       </div>

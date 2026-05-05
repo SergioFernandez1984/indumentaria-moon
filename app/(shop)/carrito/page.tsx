@@ -1,153 +1,120 @@
 "use client";
 
-import { useCartStore } from "@/lib/cart-store";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, Truck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/lib/cart-store";
+import { SHIPPING_COPY } from "@/lib/shipping";
 
 export default function CarritoPage() {
   const { items, removeItem, updateQuantity, total } = useCartStore();
+  const subtotal = total();
 
   if (items.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-4xl">
-            🛒
-          </div>
-        </div>
-        <h1 className="text-2xl font-bold mb-4">Tu carrito está vacío</h1>
-        <p className="text-gray-500 mb-8">
-          Parece que todavía no has agregado nada a tu carrito.
-        </p>
+      <div className="mx-auto max-w-4xl px-4 py-20 text-center">
+        <ShoppingBag className="mx-auto mb-6 size-14 text-zinc-300" />
+        <h1 className="mb-4 text-2xl font-bold">Tu carrito esta vacio</h1>
+        <p className="mb-8 text-zinc-500">Cuando agregues productos, los vas a ver aca antes de finalizar la compra.</p>
         <Link href="/productos">
-          <Button className="px-8 py-6 text-lg">
-            Ver productos
-          </Button>
+          <Button className="px-8 py-6 text-base">Ver productos</Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
-        <ShoppingBag className="w-8 h-8" />
-        Tu Carrito
-      </h1>
+    <div className="mx-auto max-w-6xl py-8">
+      <div className="mb-8 flex flex-col gap-2">
+        <p className="text-sm uppercase tracking-[0.2em] text-zinc-500">Carrito</p>
+        <h1 className="flex items-center gap-3 text-3xl font-bold">
+          <ShoppingBag className="size-7" />
+          Tu compra
+        </h1>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Lista de items */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          {items.map((item) => (
-            <div
-              key={item.variantId}
-              className="flex gap-4 p-4 border rounded-xl bg-white shadow-sm"
-            >
-              <div className="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src={item.imageUrl}
-                  alt={item.productName}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="flex-1 flex flex-col justify-between py-1">
-                <div>
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-semibold text-lg">{item.productName}</h3>
-                    <button
-                      onClick={() => removeItem(item.variantId)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                  <p className="text-gray-500 text-sm">
-                    {item.variantSize && `Talle: ${item.variantSize}`}
-                    {item.variantSize && item.variantColor && " | "}
-                    {item.variantColor && `Color: ${item.variantColor}`}
-                  </p>
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <div className="flex flex-col gap-4">
+            {items.map((item) => (
+              <div key={item.variantId} className="grid grid-cols-[5rem_1fr] gap-4 border border-zinc-200 bg-white p-4 md:grid-cols-[6rem_1fr_auto]">
+                <div className="aspect-[3/4] overflow-hidden bg-zinc-100">
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full bg-zinc-200" />
+                  )}
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
-                  <div className="flex items-center border rounded-lg">
-                    <button
-                      onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                      className="p-2 hover:bg-gray-100 transition-colors"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-10 text-center font-medium">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                      className="p-2 hover:bg-gray-100 transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
+                <div className="min-w-0">
+                  <div className="flex justify-between gap-4">
+                    <div>
+                      <h3 className="font-semibold">{item.productName}</h3>
+                      <p className="mt-1 text-sm text-zinc-500">
+                        {item.variantSize && `Talle: ${item.variantSize}`}
+                        {item.variantSize && item.variantColor && " · "}
+                        {item.variantColor && `Color: ${item.variantColor}`}
+                      </p>
+                    </div>
+                    <button onClick={() => removeItem(item.variantId)} className="text-zinc-400 hover:text-red-600" aria-label="Quitar producto">
+                      <Trash2 className="size-5" />
                     </button>
                   </div>
-                  <p className="font-bold text-lg">
-                    ${(item.unitPrice * item.quantity).toLocaleString("es-AR")}
-                  </p>
+
+                  <div className="mt-5 flex items-center justify-between gap-4">
+                    <div className="inline-flex items-center border border-zinc-200">
+                      <button onClick={() => updateQuantity(item.variantId, item.quantity - 1)} className="p-2 hover:bg-zinc-100" aria-label="Restar unidad">
+                        <Minus className="size-4" />
+                      </button>
+                      <span className="w-10 text-center text-sm font-semibold">{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item.variantId, item.quantity + 1)} className="p-2 hover:bg-zinc-100" aria-label="Sumar unidad">
+                        <Plus className="size-4" />
+                      </button>
+                    </div>
+                    <p className="font-bold">${(item.unitPrice * item.quantity).toLocaleString("es-AR")}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
-          <Link
-            href="/productos"
-            className="text-sm text-gray-500 hover:text-black transition-colors underline underline-offset-4"
-          >
-            ← Seguir comprando
+          <Link href="/productos" className="mt-6 inline-block text-sm font-semibold text-zinc-500 underline underline-offset-4 hover:text-zinc-950">
+            Seguir comprando
           </Link>
         </div>
 
-        {/* Resumen de compra */}
-        <div className="lg:col-span-1">
-          <div className="bg-white p-6 rounded-xl border shadow-sm sticky top-8">
-            <h2 className="text-xl font-bold mb-6">Resumen</h2>
-            
-            <div className="flex flex-col gap-4 text-gray-600 mb-6">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>${total().toLocaleString("es-AR")}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Envío</span>
-                <span className="text-green-600 font-medium">Gratis</span>
-              </div>
+        <aside className="h-fit border border-zinc-200 bg-white p-6 lg:sticky lg:top-24">
+          <h2 className="mb-6 text-xl font-bold">Resumen</h2>
+          <div className="mb-6 flex flex-col gap-4 text-sm text-zinc-600">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${subtotal.toLocaleString("es-AR")}</span>
             </div>
-
-            <div className="border-t pt-4 mb-8">
-              <div className="flex justify-between items-end">
-                <span className="text-lg font-bold">Total</span>
-                <span className="text-2xl font-bold">
-                  ${total().toLocaleString("es-AR")}
-                </span>
-              </div>
-              <p className="text-xs text-gray-400 mt-2 text-right">
-                Incluye impuestos (si aplica)
-              </p>
-            </div>
-
-            <Link href="/checkout">
-              <Button className="w-full py-7 text-lg font-bold">
-                Finalizar Compra
-              </Button>
-            </Link>
-
-            <div className="mt-6 flex flex-col gap-3">
-              <div className="flex items-center gap-2 text-xs text-gray-400">
-                <span>🔒 Pago 100% seguro</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400">
-                <span>🚚 Envíos a todo el país</span>
-              </div>
+            <div className="flex justify-between">
+              <span>Envio</span>
+              <span>Se calcula en checkout</span>
             </div>
           </div>
-        </div>
+
+          <div className="mb-8 border-t border-zinc-200 pt-4">
+            <div className="flex items-end justify-between">
+              <span className="text-lg font-bold">Total parcial</span>
+              <span className="text-2xl font-bold">${subtotal.toLocaleString("es-AR")}</span>
+            </div>
+            <p className="mt-2 text-right text-xs text-zinc-400">
+              Envio gratis desde ${SHIPPING_COPY.freeFrom.toLocaleString("es-AR")}.
+            </p>
+          </div>
+
+          <Link href="/checkout">
+            <Button className="w-full py-7 text-base font-bold">Finalizar compra</Button>
+          </Link>
+
+          <div className="mt-6 flex items-start gap-2 text-xs text-zinc-500">
+            <Truck className="mt-0.5 size-4" />
+            Enviamos a todas las provincias excepto Ushuaia.
+          </div>
+        </aside>
       </div>
     </div>
   );

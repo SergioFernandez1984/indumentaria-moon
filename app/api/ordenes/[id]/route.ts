@@ -40,12 +40,13 @@ import { NextResponse } from "next/server";
      const { id } = await params; 
      const body = await request.json(); 
  
+     const data: { status?: string; paymentStatus?: string } = {};
+     if (body.status) data.status = body.status;
+     if (body.paymentStatus) data.paymentStatus = body.paymentStatus;
+
      const orden = await prisma.order.update({ 
        where: { id }, 
-       data: { 
-         status: body.status, 
-         paymentStatus: body.paymentStatus, 
-       }, 
+       data, 
      }); 
  
      return NextResponse.json(orden); 
