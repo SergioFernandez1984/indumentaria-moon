@@ -97,6 +97,8 @@ function parseName(text: string) {
     .split(/\r?\n/)
     .map((line) => normalize(line))
     .filter(Boolean)
+    .filter((line) => /[a-zA-ZáéíóúñÁÉÍÓÚÑ]/.test(line))
+    .filter((line) => line.replace(/[^a-zA-ZáéíóúñÁÉÍÓÚÑ]/g, "").length >= 3)
     .filter((line) => !/\$?\s?\d{1,3}(?:[.\s]\d{3})+/.test(line))
     .filter((line) => !/^talle\b|^abarca\b|cede bastante/i.test(line));
 
@@ -125,6 +127,25 @@ export function parseFlyerText(text: string, imageUrl = ""): FlyerDraft {
     confidence: [name !== "Producto", price != null, sizes.length > 0].filter(Boolean).length / 3,
     rawText: text.trim(),
   };
+}
+
+export function validateFlyerDraft(draft: FlyerDraft) {
+  const hasUsefulName = draft.name !== "Producto" && draft.name.length >= 3;
+  const hasPrice = draft.basePrice != null && draft.basePrice > 0;
+
+  if (!hasUsefulName && !hasPrice) {
+    return "No pude leer nombre ni precio de esta imagen. Revisala manualmente o cargala como producto rapido.";
+  }
+
+  if (!hasUsefulName) {
+    return "No pude leer un nombre confiable de esta imagen.";
+  }
+
+  if (!hasPrice) {
+    return "No pude leer un precio confiable de esta imagen.";
+  }
+
+  return null;
 }
 
 export function flyerDraftToCsvLine(draft: FlyerDraft) {

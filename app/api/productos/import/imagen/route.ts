@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { recognize } from "tesseract.js";
+import { createWorker, PSM } from "tesseract.js";
 import path from "path";
-import { flyerDraftToCsvLine, parseFlyerText } from "@/lib/flyer-parser";
+import { flyerDraftToCsvLine, parseFlyerText, validateFlyerDraft } from "@/lib/flyer-parser";
 import { saveProductImageLocally } from "@/lib/local-images";
 
 export const runtime = "nodejs";
@@ -19,10 +19,32 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const saved = await saveProductImageLocally(file, buffer);
-    const ocr = await recognize(buffer, "spa+eng", {
+
+    const worker = await createWorker("spa+eng", undefined, {
       workerPath: path.join(process.cwd(), "node_modules/tesseract.js/src/worker-script/node/index.js"),
     });
+    await worker.setParameters({
+      tessedit_pageseg_mode: PSM.SPARSE_TEXT,
+      preserve_interword_spaces: "1",
+    });
+
+    const ocr = await worker.recognize(buffer);
+    await worker.terminate();
+
     const draft = parseFlyerText(ocr.data.text, saved.url);
+    const validationError = validateFlyerDraft(draft);
+
+    if (validationError) {
+      return NextResponse.json(
+        {
+          error: validationError,
+          draft,
+          rawText: draft.rawText,
+          imageUrl: saved.url,
+        },
+        { status: 422 }
+      );
+    }
 
     return NextResponse.json({
       draft,
