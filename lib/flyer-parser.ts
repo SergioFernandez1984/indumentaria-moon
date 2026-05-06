@@ -102,17 +102,31 @@ function parseName(text: string) {
     .filter((line) => !/\$?\s?\d{1,3}(?:[.\s]\d{3})+/.test(line))
     .filter((line) => !/^talle\b|^abarca\b|cede bastante/i.test(line));
 
-  const best = lines
-    .filter((line) => /vestido|conjunto|remera|musculosa|top|short|pantalon|pollera/i.test(line))
-    .sort((a, b) => b.length - a.length)[0];
+  const productLineIndex = lines.findIndex((line) =>
+    /vestido|conjunto|remera|musculosa|top|short|pantalon|pollera/i.test(line)
+  );
 
-  return titleCase(best ?? lines[0] ?? "Producto");
+  if (productLineIndex >= 0) {
+    const productLine = lines[productLineIndex];
+    const nextLine = lines[productLineIndex + 1];
+    const materialLine =
+      nextLine && nextLine.length <= 24 && !/vestido|conjunto|remera|musculosa|top|short|pantalon|pollera/i.test(nextLine)
+        ? ` ${nextLine}`
+        : "";
+
+    return titleCase(`${productLine}${materialLine}`);
+  }
+
+  return titleCase(lines[0] ?? "Producto");
 }
 
 export function parseFlyerText(text: string, imageUrl = ""): FlyerDraft {
   const name = parseName(text);
   const price = parsePrice(text);
-  const sizes = parseSizes(text);
+  const sizeText = text
+    .replace(/\$?\s?\d{1,3}(?:[.\s]\d{3})+|\$?\s?\d{4,6}/g, " ")
+    .replace(/(\d)\s*al\s*(\d)/gi, "$1-$2");
+  const sizes = parseSizes(sizeText);
   const colors = parseColors(text);
 
   return {
