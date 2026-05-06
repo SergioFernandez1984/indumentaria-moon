@@ -79,12 +79,24 @@ export function parseCatalogCsv(csv: string): CatalogImportRow[] {
 
   const headers = parseCsvLine(lines[0]).map((header) => header.trim());
 
-  return lines.slice(1).map((line, index) => {
+  return lines
+    .slice(1)
+    .map((line, index): CatalogImportRow | null => {
     const cells = parseCsvLine(line);
     const record = Object.fromEntries(headers.map((header, i) => [header, cells[i] ?? ""]));
 
     const basePrice = parseMoney(record.basePrice || record.precio);
-    if (!record.name && !record.nombre) {
+    const name = record.name || record.nombre;
+    const description = record.description || record.descripcion || "";
+    const isReviewRow =
+      description.trim().toLowerCase().startsWith("revisar:") ||
+      (name.trim().toLowerCase() === "producto" && basePrice == null);
+
+    if (isReviewRow && basePrice == null) {
+      return null;
+    }
+
+    if (!name) {
       throw new Error(`Fila ${index + 2}: falta el nombre del producto.`);
     }
     if (basePrice == null) {
@@ -92,8 +104,8 @@ export function parseCatalogCsv(csv: string): CatalogImportRow[] {
     }
 
     return {
-      name: record.name || record.nombre,
-      description: record.description || record.descripcion || "",
+      name,
+      description,
       basePrice,
       salePrice: parseMoney(record.salePrice || record.precioOferta),
       category: record.category || record.categoria || "",
@@ -103,7 +115,8 @@ export function parseCatalogCsv(csv: string): CatalogImportRow[] {
       imageUrls: splitList(record.imageUrls || record.imagenes),
       isActive: record.isActive ? record.isActive !== "false" : true,
     };
-  });
+  })
+  .filter((row): row is CatalogImportRow => row != null);
 }
 
 export const CATALOG_CSV_TEMPLATE =
