@@ -19,11 +19,9 @@ async function contrastWhiteText(buffer: Buffer, region: sharp.Region, threshold
 async function redPriceBadge(buffer: Buffer) {
   const source = sharp(buffer).rotate();
   const { data, info } = await source.raw().toBuffer({ resolveWithObject: true });
-  let minX = info.width;
-  let minY = info.height;
-  let maxX = 0;
-  let maxY = 0;
-  let redPixels = 0;
+  const mask = new Uint8Array(info.width * info.height);
+  const seen = new Uint8Array(info.width * info.height);
+  const components: Array<{ area: number; minX: number; minY: number; maxX: number; maxY: number }> = [];
 
   for (let y = 0; y < info.height; y += 1) {
     for (let x = 0; x < info.width; x += 1) {
@@ -32,23 +30,74 @@ async function redPriceBadge(buffer: Buffer) {
       const green = data[index + 1];
       const blue = data[index + 2];
 
-      if (red > 170 && green < 90 && blue < 90) {
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
-        redPixels += 1;
+      if (red > 180 && green < 90 && blue < 90) {
+        mask[y * info.width + x] = 1;
       }
     }
   }
 
-  if (redPixels < 100) return null;
+  for (let y = 0; y < info.height; y += 1) {
+    for (let x = 0; x < info.width; x += 1) {
+      const startIndex = y * info.width + x;
+      if (!mask[startIndex] || seen[startIndex]) continue;
 
-  const pad = 20;
-  const left = Math.max(0, minX - pad);
-  const top = Math.max(0, minY - pad);
-  const width = Math.min(info.width - left, maxX - minX + 1 + pad * 2);
-  const height = Math.min(info.height - top, maxY - minY + 1 + pad * 2);
+      const queue: Array<[number, number]> = [[x, y]];
+      let head = 0;
+      let area = 0;
+      let minX = x;
+      let minY = y;
+      let maxX = x;
+      let maxY = y;
+      seen[startIndex] = 1;
+
+      while (head < queue.length) {
+        const [cx, cy] = queue[head];
+        head += 1;
+        area += 1;
+        minX = Math.min(minX, cx);
+        minY = Math.min(minY, cy);
+        maxX = Math.max(maxX, cx);
+        maxY = Math.max(maxY, cy);
+
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx < 0 || ny < 0 || nx >= info.width || ny >= info.height) continue;
+
+          const nextIndex = ny * info.width + nx;
+          if (mask[nextIndex] && !seen[nextIndex]) {
+            seen[nextIndex] = 1;
+            queue.push([nx, ny]);
+          }
+        }
+      }
+
+      components.push({ area, minX, minY, maxX, maxY });
+    }
+  }
+
+  const badge = components
+    .map((component) => ({
+      ...component,
+      width: component.maxX - component.minX + 1,
+      height: component.maxY - component.minY + 1,
+    }))
+    .filter((component) => component.area > 1000 && component.width > 80 && component.height > 40)
+    .filter((component) => component.width / component.height > 1.2)
+    .sort((a, b) => b.area - a.area)[0];
+
+  if (!badge) return null;
+
+  const pad = 25;
+  const left = Math.max(0, badge.minX - pad);
+  const top = Math.max(0, badge.minY - pad);
+  const width = Math.min(info.width - left, badge.width + pad * 2);
+  const height = Math.min(info.height - top, badge.height + pad * 2);
   const crop = await source.extract({ left, top, width, height }).raw().toBuffer({ resolveWithObject: true });
   const output = Buffer.alloc(crop.info.width * crop.info.height * 3);
 
@@ -69,7 +118,7 @@ async function redPriceBadge(buffer: Buffer) {
   }
 
   return sharp(output, { raw: { width: crop.info.width, height: crop.info.height, channels: 3 } })
-    .resize({ width: crop.info.width * 3 })
+    .resize({ width: Math.max(500, crop.info.width * 4) })
     .png()
     .toBuffer();
 }
@@ -144,20 +193,13 @@ export async function POST(request: Request) {
     const validationError = validateFlyerDraft(draft);
 
     if (validationError) {
-      return NextResponse.json(
-        {
-          error: validationError,
-          draft,
-          rawText: draft.rawText,
-          imageUrl: saved.url,
-        },
-        { status: 422 }
-      );
+      draft.description = `REVISAR: ${validationError}`;
     }
 
     return NextResponse.json({
       draft,
       csvLine: flyerDraftToCsvLine(draft),
+      warning: validationError,
       usedVision: false,
     });
   } catch (error) {

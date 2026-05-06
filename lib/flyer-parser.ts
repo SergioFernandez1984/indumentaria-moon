@@ -47,10 +47,28 @@ function titleCase(value: string) {
 }
 
 function parsePrice(text: string) {
-  const match = text.match(/\$?\s?(\d{1,3}(?:[.\s]\d{3})+|\d{4,6})/);
-  if (!match) return null;
-  const parsed = Number(match[1].replace(/[.\s]/g, ""));
-  return Number.isFinite(parsed) ? parsed : null;
+  const compact = text.replace(/(?<=\d)\s+(?=\d)/g, "");
+  const matches = [...compact.matchAll(/\$?\s?(\d{1,3}(?:[.\s]\d{2,3})+|\d{4,6})/g)];
+
+  for (const match of matches) {
+    const raw = match[1];
+    const digits = raw.replace(/[.\s]/g, "");
+    let parsed = Number(digits);
+
+    if (!Number.isFinite(parsed)) continue;
+
+    if (/\d{1,3}\.\d{2}$/.test(raw) && parsed < 10000) {
+      parsed *= 10;
+    }
+
+    if (parsed > 200000 && digits.length === 6 && digits.startsWith("5")) {
+      parsed = Number(digits.slice(1));
+    }
+
+    if (parsed >= 1000 && parsed <= 200000) return parsed;
+  }
+
+  return null;
 }
 
 function parseSizes(text: string) {
